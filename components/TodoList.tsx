@@ -26,7 +26,7 @@ export default function TodoList() {
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
     console.log(event.key)
     if (event.key === 'Enter') {
-      setTodos([...todos, { id: todos.length + 1, text: newTodo, isChecked: false }]);
+      setTodos([...todos, { id: getNewId(todos), text: newTodo, isChecked: false }]);
       setNewTodo('');
     }
   }
@@ -80,3 +80,6 @@ export default function TodoList() {
   )
 }
 
+export function getNewId(todos: Todo[]): number {
+  return Math.max(...todos.map((todo) => todo.id), 0) + 1
+};

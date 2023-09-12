@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('example to-do app', () => {
+describe('to-do app', () => {
   beforeEach(() => {
     cy.visit('/')
   })
@@ -20,11 +20,6 @@ describe('example to-do app', () => {
       .last()
       .should('have.text', newItem)
   })
-
-  // TODO: unskip below tests and make them pass
-  // TODO: add more tests as needed
-  // TODO: close related github issues
-  // TODO: create next github issues
 
   it('can check off an item as completed', () => {
     cy.contains('Pay electric bill')
@@ -49,24 +44,18 @@ describe('example to-do app', () => {
         .check()
     })
 
-    it.skip('can filter for uncompleted tasks', () => {
-      // We'll click on the "active" button in order to
-      // display only incomplete items
+    it('can filter for uncompleted tasks', () => {
       cy.contains('Active').click()
 
-      // After filtering, we can assert that there is only the one
-      // incomplete item in the list.
       cy.get('.todo-list li')
         .should('have.length', 1)
         .first()
         .should('have.text', 'Walk the dog')
 
-      // For good measure, let's also assert that the task we checked off
-      // does not exist on the page.
       cy.contains('Pay electric bill').should('not.exist')
     })
 
-    it.skip('can filter for completed tasks', () => {
+    it('can filter for completed tasks', () => {
       // We can perform similar steps as the test above to ensure
       // that only completed tasks are shown
       cy.contains('Completed').click()
@@ -86,7 +75,7 @@ describe('example to-do app', () => {
       // This button only appears when at least one task is checked
       // so this command is implicitly verifying that it does exist.
       // Second, it selects the button so we can click it.
-      cy.contains('Clear completed').click()
+      cy.contains('Clear Completed').click()
 
       // Then we can make sure that there is only one element
       // in the list and our element does not exist
@@ -98,4 +87,8 @@ describe('example to-do app', () => {
       cy.contains('Clear completed').should('not.exist')
     })
   })
+
+  // TODO: add more tests as needed
+  // TODO: close related github issues
+  // TODO: create next github issues
 })

@@ -15,6 +15,8 @@ const defaultTodos: Todo[] = [
 export default function TodoList() {
   const [todos, setTodos] = useState(defaultTodos);
   const [newTodo, setNewTodo] = useState('');
+  const [active, setActive] = useState(false);
+  const [complete, setComplete] = useState(false);
 
 
   function onNewTodoChange(event: ChangeEvent<HTMLInputElement>): void {
@@ -38,12 +40,25 @@ export default function TodoList() {
     }))
   }
 
+  function clearCompleted(_event: any): void {
+    setTodos(todos.filter((todo) => !todo.isChecked));
+  }
+
   return (
     <>
       <input type='text' placeholder='Add a new todo' onKeyDown={handleKeyDown} onChange={onNewTodoChange} className='text-black' data-test="new-todo" />
+      <button onClick={(_event) => setActive(!active)}>Active</button>
+      <button onClick={(_event) => setComplete(!complete)}>Completed</button>
+      <button onClick={clearCompleted}>Clear Completed</button>
       <ul className='todo-list'>
         {todos.map((todo) => {
           const { id, text, isChecked } = todo;
+          if (active && isChecked) {
+            return null;
+          }
+          if (complete && !isChecked) {
+            return null;
+          }
           return (
             <li key={id} className={isChecked ? 'completed' : ''}>
               <input type='checkbox' onChange={(event) => onCheckBoxChange(event, todo)} checked={isChecked} />

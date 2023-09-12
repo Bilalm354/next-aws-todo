@@ -34,10 +34,6 @@ describe('to-do app', () => {
 
   context('with a checked task', () => {
     beforeEach(() => {
-      // We'll take the command we used above to check off an element
-      // Since we want to perform multiple tests that start with checking
-      // one element, we put it in the beforeEach hook
-      // so that it runs at the start of every test.
       cy.contains('Pay electric bill')
         .parent()
         .find('input[type=checkbox]')
@@ -56,8 +52,6 @@ describe('to-do app', () => {
     })
 
     it('can filter for completed tasks', () => {
-      // We can perform similar steps as the test above to ensure
-      // that only completed tasks are shown
       cy.contains('Completed').click()
 
       cy.get('.todo-list li')
@@ -69,26 +63,32 @@ describe('to-do app', () => {
     })
 
     it('can delete all completed tasks', () => {
-      // First, let's click the "Clear completed" button
-      // `contains` is actually serving two purposes here.
-      // First, it's ensuring that the button exists within the dom.
-      // This button only appears when at least one task is checked
-      // so this command is implicitly verifying that it does exist.
-      // Second, it selects the button so we can click it.
       cy.contains('Clear Completed').click()
 
-      // Then we can make sure that there is only one element
-      // in the list and our element does not exist
       cy.get('.todo-list li')
         .should('have.length', 1)
         .should('not.have.text', 'Pay electric bill')
 
-      // Finally, make sure that the clear button no longer exists.
       cy.contains('Clear completed').should('not.exist')
     })
   })
 
-  // TODO: add more tests as needed
-  // TODO: close related github issues
-  // TODO: create next github issues
+  it('can update the text of a todo', () => {
+      const initialText = 'Walk the dog';
+      const newText = 'Feed the cat'
+
+      
+  })
+
+  it('clears the todo input after adding a todo', () => {
+    const itemText = 'Feed the cat'
+
+    cy.get('[data-test=new-todo]').type(`${itemText}{enter}`).should('have.value', '')
+  })
+
+  it.skip('can delete a todo item', () => {})
+
+  it.skip('can delete all todo items', () => {})
+
+  it.skip('does not allow empty todo items', () => {})
 })

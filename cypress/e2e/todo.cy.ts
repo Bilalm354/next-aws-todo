@@ -77,7 +77,7 @@ describe('to-do app', () => {
       const initialText = 'Walk the dog';
       const newText = 'Feed the cat'
 
-      
+
   })
 
   it('clears the todo input after adding a todo', () => {
@@ -86,9 +86,15 @@ describe('to-do app', () => {
     cy.get('[data-test=new-todo]').type(`${itemText}{enter}`).should('have.value', '')
   })
 
-  it.skip('can delete a todo item', () => {})
+  it('does not allow empty todo items', () => {
+    cy.get('[data-test=new-todo]').type('{enter}')
+
+    cy.get('.todo-list li').should('have.length', 2)
+  })
+
+  it.skip('can delete a todo item', () => {
+
+  })
 
   it.skip('can delete all todo items', () => {})
-
-  it.skip('does not allow empty todo items', () => {})
 })

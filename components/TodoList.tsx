@@ -25,7 +25,7 @@ export default function TodoList() {
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
     console.log(event.key)
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && newTodo !== '') {
       setTodos([...todos, { id: getNewId(todos), text: newTodo, isChecked: false }]);
       setNewTodo('');
     }
@@ -69,10 +69,12 @@ export default function TodoList() {
 
   return (
     <>
+      <div className='space-x-4'>
+        <button onClick={(_event) => setActive(!active)}>Active</button>
+        <button onClick={(_event) => setComplete(!complete)}>Completed</button>
+        <button onClick={clearCompleted}>Clear Completed</button>
+      </div>
       <input type='text' placeholder='Add a new todo' onKeyDown={handleKeyDown} onChange={onNewTodoChange} value={newTodo} className='text-black' data-test="new-todo" />
-      <button onClick={(_event) => setActive(!active)}>Active</button>
-      <button onClick={(_event) => setComplete(!complete)}>Completed</button>
-      <button onClick={clearCompleted}>Clear Completed</button>
       <ul className='todo-list'>
         <TodoItems todos={todos} />
       </ul>

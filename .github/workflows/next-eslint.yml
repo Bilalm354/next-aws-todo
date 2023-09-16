@@ -30,6 +30,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: cd into directory
+        run: |
+          cd ./next
+
       - name: Install ESLint
         run: |
           npm install eslint@8.10.0

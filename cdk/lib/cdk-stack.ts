@@ -7,8 +7,9 @@ export class CdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const table = new dynamodb.TableV2(this, 'Table', {
-      partitionKey: { name: 'pk', type: dynamodb.AttributeType.STRING },
+    new dynamodb.TableV2(this, 'TodoTable', {
+      partitionKey: { name: 'id', type: dynamodb.AttributeType.NUMBER },
+      tableName: 'todo-table',
     });
   }
 }

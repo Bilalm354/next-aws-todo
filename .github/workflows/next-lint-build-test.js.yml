@@ -29,5 +29,5 @@ jobs:
     - run: cd ./next && npm ci
     - run: cd ./next && npm run build --if-present
     - run: cd ./next && npm test
-    - run: cd ./next && npm run dev & npm run cypress:run
+    - run: cd ./next && npm run dev & cd ./next && npm run cypress:run
     - run: cd ./next && npm run lint

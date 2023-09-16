@@ -32,7 +32,7 @@ jobs:
 
       - name: cd into directory
         run: |
-          cd ./next
+          
       
       - name: list contents
         run: |
@@ -40,11 +40,11 @@ jobs:
 
       - name: Install ESLint
         run: |
-          npm install eslint@8.10.0
-          npm install @microsoft/eslint-formatter-sarif@2.1.7
+          cd ./next & npm install eslint@8.10.0
+          cd ./next & npm install @microsoft/eslint-formatter-sarif@2.1.7
 
       - name: Run ESLint
-        run: npx eslint .
+        run: cd ./next & npx eslint .
           --config .eslintrc.json
           --ext .js,.jsx,.ts,.tsx
           --format @microsoft/eslint-formatter-sarif

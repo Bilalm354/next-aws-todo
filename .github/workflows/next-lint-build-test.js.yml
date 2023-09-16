@@ -26,10 +26,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: cd ./next
-    - run: ls -la
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
-    - run: npm run dev & npm run cypress:run
-    - run: npm run lint
+    - run: cd ./next & npm ci
+    - run: cd ./next & npm run build --if-present
+    - run: cd ./next & npm test
+    - run: cd ./next & npm run dev & npm run cypress:run
+    - run: cd ./next & npm run lint

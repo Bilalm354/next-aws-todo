@@ -32,8 +32,8 @@ jobs:
 
       - name: Install ESLint
         run: |
-          cd ./next & npm install eslint@8.10.0
-          cd ./next & npm install @microsoft/eslint-formatter-sarif@2.1.7
+          cd ./next && npm install eslint@8.10.0
+          cd ./next && npm install @microsoft/eslint-formatter-sarif@2.1.7
 
       - name: Run ESLint
         run: cd ./next & npx eslint .

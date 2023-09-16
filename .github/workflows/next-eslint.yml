@@ -33,6 +33,10 @@ jobs:
       - name: cd into directory
         run: |
           cd ./next
+      
+      - name: list contents
+        run: |
+          ls -la
 
       - name: Install ESLint
         run: |

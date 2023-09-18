@@ -1,16 +1,13 @@
-"use client"
-import { ChangeEvent, KeyboardEvent, useState } from 'react'
+'use client';
+import { ChangeEvent, KeyboardEvent, useState } from 'react';
+import { Todo } from '../../common/types/Todo';
 
-interface Todo {
-  id: number,
-  text: string,
-  isChecked: boolean
-}
+
 
 const defaultTodos: Todo[] = [
   { id: 1, text: 'Pay electric bill', isChecked: false },
   { id: 2, text: 'Walk the dog', isChecked: false },
-]
+];
 
 export default function TodoList() {
   const [todos, setTodos] = useState(defaultTodos);
@@ -24,7 +21,7 @@ export default function TodoList() {
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
-    console.log(event.key)
+    console.log(event.key);
     if (event.key === 'Enter' && newTodo !== '') {
       setTodos([...todos, { id: getNewId(todos), text: newTodo, isChecked: false }]);
       setNewTodo('');
@@ -34,10 +31,10 @@ export default function TodoList() {
   function onCheckBoxChange(event: ChangeEvent<HTMLInputElement>, todo: Todo): void {
     setTodos(todos.map((t) => {
       if (t.id === todo.id) {
-        return { ...t, isChecked: event.target.checked }
+        return { ...t, isChecked: event.target.checked };
       }
       return t;
-    }))
+    }));
   }
 
   function clearCompleted(_event: any): void {
@@ -60,11 +57,11 @@ export default function TodoList() {
         <input type='checkbox' onChange={(event) => onCheckBoxChange(event, todo)} checked={isChecked} />
         <span>{text}</span>
       </li>
-    )
+    );
   }
 
   function TodoItems({ todos }: { todos: Todo[] }) {
-    return todos.map((todo) => <TodoItem key={todo.id} todo={todo} />)
+    return todos.map((todo) => <TodoItem key={todo.id} todo={todo} />);
   }
 
   return (
@@ -79,9 +76,9 @@ export default function TodoList() {
         <TodoItems todos={todos} />
       </ul>
     </>
-  )
+  );
 }
 
 export function getNewId(todos: Todo[]): number {
-  return Math.max(...todos.map((todo) => todo.id), 0) + 1
-};
+  return Math.max(...todos.map((todo) => todo.id), 0) + 1;
+}

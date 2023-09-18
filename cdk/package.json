@@ -8,9 +8,11 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "cdk:deploy": "cdk deploy"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.121",
     "@types/jest": "^29.5.4",
     "@types/node": "20.5.9",
     "aws-cdk": "2.96.2",
@@ -21,6 +23,7 @@
   },
   "dependencies": {
     "aws-cdk-lib": "2.96.2",
+    "aws-lambda": "^1.0.7",
     "cdk": "^2.96.2",
     "constructs": "^10.0.0",
     "source-map-support": "^0.5.21"

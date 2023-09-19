@@ -1,4 +1,4 @@
-import {  DynamoDBClient, PutItemCommand, PutItemCommandInput } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, PutItemCommand, PutItemCommandInput } from '@aws-sdk/client-dynamodb';
 import { Todo } from '../../common/types/Todo';
 import { APIGatewayProxyEvent } from 'aws-lambda';
 
@@ -12,7 +12,7 @@ export async function handler(event: APIGatewayProxyEvent, _context: any) {
         throw new Error('Invalid request');
     }
 
-    const  todo = JSON.parse(event.body) as Todo;
+    const todo = JSON.parse(event.body) as Todo;
 
     const { id, text, isChecked } = todo;
 
@@ -38,7 +38,7 @@ export async function handler(event: APIGatewayProxyEvent, _context: any) {
     try {
         const data = await client.send(command);
         console.log({data, command});
-        // process data.
+        return {statusCode: 200, body: "OK"};
     } catch (error: any) {
         console.error({error});
         throw new Error(error);

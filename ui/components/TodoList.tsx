@@ -2,8 +2,6 @@
 import { ChangeEvent, KeyboardEvent, useState } from 'react';
 import { Todo } from '../../common/types/Todo';
 
-
-
 const defaultTodos: Todo[] = [
   { id: 1, text: 'Pay electric bill', isChecked: false },
   { id: 2, text: 'Walk the dog', isChecked: false },
@@ -11,21 +9,45 @@ const defaultTodos: Todo[] = [
 
 export default function TodoList() {
   const [todos, setTodos] = useState(defaultTodos);
-  const [newTodo, setNewTodo] = useState('');
+  const [inputTodoText, setInputTodoText] = useState('');
   const [active, setActive] = useState(false);
   const [complete, setComplete] = useState(false);
 
 
   function onNewTodoChange(event: ChangeEvent<HTMLInputElement>): void {
-    setNewTodo(event.target.value);
+    setInputTodoText(event.target.value);
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
     console.log(event.key);
-    if (event.key === 'Enter' && newTodo !== '') {
-      setTodos([...todos, { id: getNewId(todos), text: newTodo, isChecked: false }]);
-      setNewTodo('');
+    if (event.key === 'Enter') {
+      addNewTodo();
     }
+  }
+
+  function addNewTodo(): void {
+    if (inputTodoText !== '') {
+      const newTodo = constructNewTodo(inputTodoText)
+      addToTodosState(newTodo);
+      setInputTodoText('');
+      addToDb(newTodo);
+    }
+  }
+
+  function addToTodosState(todo: Todo): void {
+    setTodos([...todos, todo]);
+  }
+
+  function constructNewTodo(text: string): Todo {
+    return { id: getNewId(todos), text: text, isChecked: false };
+  }
+
+  async function addToDb(todo: Todo): Promise<void> {
+    await fetch('/api', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(todo),
+    });
   }
 
   function onCheckBoxChange(event: ChangeEvent<HTMLInputElement>, todo: Todo): void {
@@ -71,7 +93,7 @@ export default function TodoList() {
         <button onClick={(_event) => setComplete(!complete)}>Completed</button>
         <button onClick={clearCompleted}>Clear Completed</button>
       </div>
-      <input type='text' placeholder='Add a new todo' onKeyDown={handleKeyDown} onChange={onNewTodoChange} value={newTodo} className='text-black' data-test="new-todo" />
+      <input type='text' placeholder='Add a new todo' onKeyDown={handleKeyDown} onChange={onNewTodoChange} value={inputTodoText} className='text-black' data-test="new-todo" />
       <ul className='todo-list'>
         <TodoItems todos={todos} />
       </ul>

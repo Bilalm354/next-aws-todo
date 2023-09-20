@@ -1,25 +1,32 @@
 'use client';
-import { ChangeEvent, KeyboardEvent, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from 'react';
 import { Todo } from '../../common/types/Todo';
 
-const defaultTodos: Todo[] = [
-  { id: 1, text: 'Pay electric bill', isChecked: false },
-  { id: 2, text: 'Walk the dog', isChecked: false },
-];
-
 export default function TodoList() {
-  const [todos, setTodos] = useState(defaultTodos);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [inputTodoText, setInputTodoText] = useState('');
   const [active, setActive] = useState(false);
   const [complete, setComplete] = useState(false);
+  const [data, setData] = useState<Todo[] | null>(null)
+  const [isLoading, setLoading] = useState(true)
 
+  useEffect(() => {
+    fetch('https://s7geuw06y9.execute-api.us-east-1.amazonaws.com/prod/todo')
+      .then((res) => res.json())
+      .then((data) => {
+        const { todos } = data
+        setTodos(todos)
+        setLoading(false)
+      })
+  }, [])
+
+  if (isLoading) return <p>Loading...</p>
 
   function onNewTodoChange(event: ChangeEvent<HTMLInputElement>): void {
     setInputTodoText(event.target.value);
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
-    console.log(event.key);
     if (event.key === 'Enter') {
       addNewTodo();
     }

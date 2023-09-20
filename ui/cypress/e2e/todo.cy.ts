@@ -1,8 +1,17 @@
 /// <reference types="cypress" />
 
+import { Todo } from '../../../common/types/Todo';
+
+const defaultTodos: Todo[] = [
+  { id: 1, text: 'Pay electric bill', isChecked: false },
+  { id: 2, text: 'Walk the dog', isChecked: false },
+];
+
+
 describe('to-do app', () => {
   beforeEach(() => {
     cy.visit('/')
+    cy.intercept('GET', 'https://s7geuw06y9.execute-api.us-east-1.amazonaws.com/prod/todo', { todos: defaultTodos })
   })
 
   it('displays two todo items by default', () => {

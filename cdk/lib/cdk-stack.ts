@@ -13,8 +13,15 @@ export class CdkStack extends cdk.Stack {
         const addTodoLambda = new NodejsFunction (this, 'addTodoLambda', {
             runtime: lambda.Runtime.NODEJS_18_X,
             handler: 'index.handler',
-            entry: path.join(__dirname, '.', 'addTodo.ts'),
+            entry: path.join(__dirname, '.', 'lambdas/addTodo.ts'),
             functionName: 'addTodoLambda',
+        });
+
+        const getTodoLambda = new NodejsFunction (this, 'getTodoLambda', {
+            runtime: lambda.Runtime.NODEJS_18_X,
+            handler: 'index.handler',
+            entry: path.join(__dirname, '.', 'lambdas/getTodo.ts'),
+            functionName: 'getTodoLambda',
         });
 
         const todoTable = new dynamodb.TableV2(this, 'TodoTable', {
@@ -23,6 +30,7 @@ export class CdkStack extends cdk.Stack {
         });
 
         todoTable.grantReadWriteData(addTodoLambda);
+        todoTable.grantReadData(getTodoLambda);
 
         const todoRestApi = new apigateway.RestApi(this, 'todoRestApi', {
             restApiName: 'todoRestApi',
@@ -31,5 +39,6 @@ export class CdkStack extends cdk.Stack {
         const todoResource = todoRestApi.root.addResource('todo');
 
         todoResource.addMethod('POST', new apigateway.LambdaIntegration(addTodoLambda));
+        todoResource.addMethod('GET', new apigateway.LambdaIntegration(getTodoLambda));
     }
 }

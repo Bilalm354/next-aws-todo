@@ -16,15 +16,15 @@ describe('to-do app', () => {
 
   it('displays two todo items by default', () => {
     cy.get('.todo-list li').should('have.length', 2)
-    cy.get('.todo-list li').first().should('have.text', 'Pay electric bill')
-    cy.get('.todo-list li').last().should('have.text', 'Walk the dog')
+    cy.get('.todo-list li div span').first().should('have.text', 'Pay electric bill')
+    cy.get('.todo-list li div span').last().should('have.text', 'Walk the dog')
   })
 
   it('can add new todo items', () => {
     const newItem = 'Feed the cat'
 
     cy.get('[data-test=new-todo]').type(`${newItem}{enter}`)
-    cy.get('.todo-list li')
+    cy.get('.todo-list li div span')
       .should('have.length', 3)
       .last()
       .should('have.text', newItem)
@@ -52,7 +52,7 @@ describe('to-do app', () => {
     it('can filter for uncompleted tasks', () => {
       cy.contains('Active').click()
 
-      cy.get('.todo-list li')
+      cy.get('.todo-list li div span')
         .should('have.length', 1)
         .first()
         .should('have.text', 'Walk the dog')
@@ -63,7 +63,7 @@ describe('to-do app', () => {
     it('can filter for completed tasks', () => {
       cy.contains('Completed').click()
 
-      cy.get('.todo-list li')
+      cy.get('.todo-list li div span')
         .should('have.length', 1)
         .first()
         .should('have.text', 'Pay electric bill')
@@ -83,10 +83,17 @@ describe('to-do app', () => {
   })
 
   it('can update the text of a todo', () => {
-      const initialText = 'Walk the dog';
-      const newText = 'Feed the cat'
-
-
+    cy.contains('Pay electric bill')
+      .parent()
+      .parent()
+      .contains('Edit')
+      .click()
+    
+    const newItemText = 'Pay the electric bill'
+    
+    cy.get('[data-test=new-todo]').clear().type(`${newItemText}{enter}`);
+    cy.contains('Pay the electric bill').should('exist');
+    cy.contains('Pay electric bill').should('not.exist');
   })
 
   it('clears the todo input after adding a todo', () => {

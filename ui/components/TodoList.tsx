@@ -7,8 +7,8 @@ export default function TodoList() {
   const [inputTodoText, setInputTodoText] = useState('');
   const [active, setActive] = useState(false);
   const [complete, setComplete] = useState(false);
-  const [data, setData] = useState<Todo[] | null>(null)
   const [isLoading, setLoading] = useState(true)
+  const [editingTodoId, setEditingTodoId] = useState<number | null>(null)
 
   useEffect(() => {
     fetch('https://s7geuw06y9.execute-api.us-east-1.amazonaws.com/prod/todo')
@@ -28,15 +28,27 @@ export default function TodoList() {
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>): void {
     if (event.key === 'Enter') {
-      addNewTodo();
+      const isEditTodo = editingTodoId;
+      const isNewTodo = !isEditTodo;
+
+      if (isEditTodo) {
+        updateTodo({
+          id: editingTodoId,
+          text: inputTodoText,
+        });
+        setEditingTodoId(null);
+      } else if (isNewTodo) {
+        addNewTodo();
+      }
+
+      setInputTodoText('');
     }
   }
 
   function addNewTodo(): void {
-    if (inputTodoText !== '') {
+    if (isValidTodoText(inputTodoText)) {
       const newTodo = constructNewTodo(inputTodoText)
       addToTodosState(newTodo);
-      setInputTodoText('');
       addToDb(newTodo);
     }
   }
@@ -70,6 +82,41 @@ export default function TodoList() {
     setTodos(todos.filter((todo) => !todo.isChecked));
   }
 
+  function editTodo(id: number): void {
+    setEditingTodoId(id);
+    setInputTodoText(todos.find((todo) => todo.id === id)?.text || '');
+    // TODO: focus on text input
+  }
+
+  function isValidTodoText(text: string): boolean {
+    return text !== '';
+  }
+
+  function updateTodo(arg0: { id: number | null; text: any; }) {
+    const todoBeingEdited = todos.find((todo) => todo.id === arg0.id);
+
+    if (!todoBeingEdited) {
+      throw new Error('Could not find todo to edit');
+    }
+
+    const updatedTodoBeingEdited = { ...todoBeingEdited, text: arg0.text };
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === arg0.id) {
+        return updatedTodoBeingEdited;
+      }
+
+      return todo;
+    });
+
+    setTodos(updatedTodos);
+    updateTodoInDb(updatedTodoBeingEdited);
+  }
+
+  function updateTodoInDb(todo: Todo): void {
+    console.error('To do: implement updateTodoInDb');
+  }
+
+
   function TodoItem({ todo }: { todo: Todo }) {
     const { id, text, isChecked } = todo;
 
@@ -82,10 +129,13 @@ export default function TodoList() {
     }
 
     return (
-      <li key={id} className={isChecked ? 'completed' : ''}>
-        <input type='checkbox' onChange={(event) => onCheckBoxChange(event, todo)} checked={isChecked} />
-        <span>{text}</span>
-      </li>
+      <li key={id} className={isChecked ? 'completed' : 'justify-between w-48 flex'} >
+        <div>
+          <input type='checkbox' onChange={(event) => onCheckBoxChange(event, todo)} checked={isChecked} />
+          <span className='ml-2'>{text}</span>
+        </div>
+        <button className="text-stone-500" onClick={() => editTodo(id)}>Edit</button>
+      </li >
     );
   }
 
@@ -111,3 +161,4 @@ export default function TodoList() {
 export function getNewId(todos: Todo[]): number {
   return Math.max(...todos.map((todo) => todo.id), 0) + 1;
 }
+
